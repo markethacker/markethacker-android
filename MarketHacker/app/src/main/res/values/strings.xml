@@ -16,5 +16,11 @@
     <string name="confirm_remove_products">确定将商品移出购物车？</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+    <string name="money">金额</string>
+    <string name="choose_payment_type">选择付款方式</string>
+    <string name="zhifubao">支付宝</string>
+    <string name="zhaohang">招商银行储蓄卡（尾号1236）</string>
+    <string name="payment_success">支付成功</string>
+    <string name="get_products_with_qrcode">凭此二维码到售货机提取商品</string>
 
 </resources>

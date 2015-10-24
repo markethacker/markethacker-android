@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity {
     protected ListView productList;
 
     private static final int SCAN_REQUEST = 100;
+    public static final String PARAM_TOTAL = "param_total";
 
     private List<Product> products = new ArrayList<>();
     private ProductAdapter adapter;
@@ -95,7 +96,10 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.confirm_order)
     protected void confirmOrder() {
-        startActivity(new Intent(this, PaymentActivity.class));
+        Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra(PARAM_TOTAL, getTotalPrice());
+
+        startActivity(intent);
     }
 
 
@@ -139,5 +143,13 @@ public class MainActivity extends BaseActivity {
 
         products.add(product);
         adapter.notifyDataSetChanged();
+    }
+
+    private float getTotalPrice() {
+        float total = 0;
+        for (Product product : products) {
+            total += product.getPrice() * product.getQuantity();
+        }
+        return total;
     }
 }

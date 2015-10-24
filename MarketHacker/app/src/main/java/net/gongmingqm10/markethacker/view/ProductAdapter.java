@@ -89,7 +89,7 @@ public class ProductAdapter extends BaseAdapter {
 
         public void populate(final Product product) {
             String imageUrl = ApiEnvironment.BASE_URL + product.getAvatar().getUrl();
-            Picasso.with(context).load(imageUrl).into(productImage);
+            Picasso.with(context).load(imageUrl).placeholder(R.drawable.sample).into(productImage);
             productPrice.setText(context.getResources().getString(R.string.format_price, product.getPrice()));
             productDisc.setText(context.getResources().getString(R.string.format_desc, product.getName(), product.getDesc()));
 

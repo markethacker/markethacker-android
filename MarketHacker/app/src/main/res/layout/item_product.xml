@@ -12,7 +12,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/sample"
         />
     <RelativeLayout
         android:layout_height="wrap_content"
