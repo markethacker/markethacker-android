@@ -11,7 +11,7 @@
         android:id="@+id/product_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         />
     <RelativeLayout
         android:layout_height="wrap_content"

@@ -4,6 +4,32 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ImageView
+            android:id="@+id/empty_bucket"
+            android:layout_height="72dp"
+            android:layout_width="72dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_shopping_cart"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            />
+        <TextView
+            android:layout_below="@id/empty_bucket"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="#B9B9B9"
+            android:text="@string/bucket_empty_tips"
+            />
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/product_list"
         android:layout_width="match_parent"

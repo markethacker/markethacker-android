@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import net.gongmingqm10.markethacker.R;
@@ -23,6 +25,12 @@ public class MainActivity extends BaseActivity {
 
     @Bind(R.id.product_list)
     protected ListView productList;
+
+    @Bind(R.id.empty_view)
+    protected View emptyView;
+
+    @Bind(R.id.confirm_order)
+    protected Button confirmOrderBtn;
 
     private static final int SCAN_REQUEST = 100;
     public static final String PARAM_TOTAL = "param_total";
@@ -81,6 +89,11 @@ public class MainActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         products.remove(product);
                         adapter.notifyDataSetChanged();
+
+                        if (products.size() == 0) {
+                            confirmOrderBtn.setEnabled(false);
+                        }
+
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), null)
@@ -88,9 +101,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
+        confirmOrderBtn.setEnabled(false);
         adapter = new ProductAdapter(this, products);
         adapter.setQuantityListener(quantityListener);
         productList.setAdapter(adapter);
+        productList.setEmptyView(emptyView);
 
     }
 
@@ -141,6 +156,7 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        confirmOrderBtn.setEnabled(true);
         products.add(product);
         adapter.notifyDataSetChanged();
     }
