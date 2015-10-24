@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">MarketHacker</string>
+    <string name="app_name">牛13超市</string>
     <string name="pay_order">订单支付</string>
     <string name="scan">扫描</string>
     <string name="order_payment">订单结算</string>
+    <string name="is_getting_product_details">正在获取商品信息</string>
+    <string name="price">价格</string>
+
+    <string name="format_price">￥ %1$s</string>
+    <string name="format_desc">%1$s %2$s</string>
+    <string name="get_product_detail_failing">未获取到商品信息</string>
+
 </resources>

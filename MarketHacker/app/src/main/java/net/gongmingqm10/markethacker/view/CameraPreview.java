@@ -3,7 +3,7 @@
  * 
  * Created by lisah0 on 2012-02-24
  */
-package net.gongmingqm10.markethacker.activity;
+package net.gongmingqm10.markethacker.view;
 
 import java.io.IOException;
 

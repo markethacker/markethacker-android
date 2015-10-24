@@ -1,5 +1,7 @@
 package net.gongmingqm10.markethacker.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Handler;
@@ -8,6 +10,9 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import net.gongmingqm10.markethacker.R;
+import net.gongmingqm10.markethacker.model.Product;
+import net.gongmingqm10.markethacker.rest.RestClient;
+import net.gongmingqm10.markethacker.view.CameraPreview;
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
@@ -15,8 +20,13 @@ import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
 import butterknife.Bind;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ScanActivity extends BaseActivity {
+
+    public static final String PARAM_PRODUCT = "product";
 
     static {
         System.loadLibrary("iconv");
@@ -107,10 +117,26 @@ public class ScanActivity extends BaseActivity {
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
                     Toast.makeText(ScanActivity.this, sym.getData(), Toast.LENGTH_LONG).show();
+
+                    showProgressDialog();
+                    String productId = sym.getData();
+                    requestProductDetail(productId);
                 }
             }
         }
     };
+
+    private ProgressDialog progressDialog;
+
+    private void showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, null, getString(R.string.is_getting_product_details));
+    }
+
+    private void dismissDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 
     // Mimic continuous auto-focusing
     Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
@@ -118,4 +144,26 @@ public class ScanActivity extends BaseActivity {
             autoFocusHandler.postDelayed(doAutoFocus, 1000);
         }
     };
+
+    private void requestProductDetail(String productId) {
+        RestClient.getInstance().getProductService()
+                .getProduct(productId, new Callback<Product>() {
+                    @Override
+                    public void success(Product product, Response response) {
+                        Intent intent = new Intent();
+                        intent.putExtra(PARAM_PRODUCT, product);
+                        setResult(RESULT_OK, intent);
+
+                        dismissDialog();
+                        finish();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(ScanActivity.this, getString(R.string.get_product_detail_failing), Toast.LENGTH_SHORT).show();
+                        dismissDialog();
+                        finish();
+                    }
+                });
+    }
 }
