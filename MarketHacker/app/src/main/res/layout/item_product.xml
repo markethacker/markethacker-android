@@ -4,46 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="afterDescendants"
     android:padding="12dp">
 
     <ImageView
         android:id="@+id/product_image"
         android:layout_width="100dp"
-        android:layout_height="75dp"
-        android:scaleType="fitStart"
-        tools:src="@drawable/sample"
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sample"
         />
-    <LinearLayout
+    <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_marginLeft="12dp"
         >
         <TextView
+            android:id="@+id/price_label"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/colorPrimary"
             android:text="@string/price"
-            android:textSize="12sp"
+            android:textSize="14sp"
             />
         <TextView
             android:id="@+id/product_price"
+            android:layout_below="@id/price_label"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_marginTop="8dp"
             tools:text="$12.00"
-            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textSize="24sp"
             />
 
         <TextView
             android:id="@+id/product_desc"
+            android:layout_below="@id/product_price"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             tools:text="红牛维生素功能饮料"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:textColor="@android:color/secondary_text_light"
             android:layout_marginTop="6dp"
             />
-    </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/product_count_minus"
+                android:layout_height="24dp"
+                android:layout_width="24dp"
+                android:src="@drawable/minus"
+                />
+            <TextView
+                android:id="@+id/product_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                tools:text="0"
+                />
+            <ImageView
+                android:id="@+id/product_count_add"
+                android:layout_height="24dp"
+                android:layout_width="24dp"
+                android:src="@drawable/add"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

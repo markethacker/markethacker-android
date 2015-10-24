@@ -9,6 +9,7 @@ public class Product implements Serializable {
     private float price;
     private String desc;
     private Avatar avatar;
+    private int quantity = 1;
 
     public Product(String desc, int id, String name, String pid, float price, Avatar avatar) {
         this.desc = desc;
@@ -41,5 +42,32 @@ public class Product implements Serializable {
 
     public float getPrice() {
         return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (id != product.id) return false;
+        return !(pid != null ? !pid.equals(product.pid) : product.pid != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (pid != null ? pid.hashCode() : 0);
+        return result;
     }
 }

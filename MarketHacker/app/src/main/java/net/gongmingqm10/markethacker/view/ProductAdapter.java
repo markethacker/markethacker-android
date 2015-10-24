@@ -18,15 +18,21 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ProductAdapter extends BaseAdapter {
 
     private final Context context;
     private List<Product> products;
+    private ProductQuantityListener quantityListener;
 
     public ProductAdapter(Context context, List<Product> products) {
         this.context = context;
         this.products = products;
+    }
+
+    public void setQuantityListener(ProductQuantityListener quantityListener) {
+        this.quantityListener = quantityListener;
     }
 
     @Override
@@ -70,17 +76,52 @@ public class ProductAdapter extends BaseAdapter {
         protected TextView productPrice;
         @Bind(R.id.product_desc)
         protected TextView productDisc;
+        @Bind(R.id.product_quantity)
+        protected TextView productQuantity;
+        @Bind(R.id.product_count_add)
+        protected ImageView addQuantityBtn;
+        @Bind(R.id.product_count_minus)
+        protected ImageView minusQuantityBtn;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
-        public void populate(Product product) {
+        public void populate(final Product product) {
             String imageUrl = ApiEnvironment.BASE_URL + product.getAvatar().getUrl();
             Picasso.with(context).load(imageUrl).into(productImage);
             productPrice.setText(context.getResources().getString(R.string.format_price, product.getPrice()));
             productDisc.setText(context.getResources().getString(R.string.format_desc, product.getName(), product.getDesc()));
+
+            final int quantity = product.getQuantity();
+            productQuantity.setText(String.valueOf(quantity));
+
+            addQuantityBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (quantityListener != null) {
+                        quantityListener.addProduct(product.getPid());
+                    }
+                }
+            });
+
+            minusQuantityBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (quantityListener != null) {
+                        quantityListener.minusProduct(product.getPid());
+                    }
+                }
+            });
+
+
         }
+
+    }
+
+    public interface ProductQuantityListener {
+        void addProduct(String pid);
+        void minusProduct(String pid);
     }
 
 

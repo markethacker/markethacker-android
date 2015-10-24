@@ -51,12 +51,18 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void startPreview() {
-        Toast.makeText(this, "扫描中...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.scanning, Toast.LENGTH_SHORT).show();
 
-        mCamera.setPreviewCallback(previewCb);
-        mCamera.startPreview();
-        mCamera.autoFocus(autoFocusCB);
-
+        framePreview.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mCamera != null) {
+                    mCamera.setPreviewCallback(previewCb);
+                    mCamera.startPreview();
+                    mCamera.autoFocus(autoFocusCB);
+                }
+            }
+        }, 3000);
     }
 
     private void initView() {
@@ -96,7 +102,9 @@ public class ScanActivity extends BaseActivity {
 
     private Runnable doAutoFocus = new Runnable() {
         public void run() {
-            mCamera.autoFocus(autoFocusCB);
+            if (mCamera != null) {
+                mCamera.autoFocus(autoFocusCB);
+            }
         }
     };
 
@@ -111,8 +119,8 @@ public class ScanActivity extends BaseActivity {
             int result = scanner.scanImage(barcode);
 
             if (result != 0) {
-                mCamera.setPreviewCallback(null);
                 mCamera.stopPreview();
+                releaseCamera();
 
                 SymbolSet syms = scanner.getResults();
                 for (Symbol sym : syms) {
@@ -133,7 +141,7 @@ public class ScanActivity extends BaseActivity {
     }
 
     private void dismissDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
+        if (progressDialog != null && progressDialog.isShowing() && !isFinishing()) {
             progressDialog.dismiss();
         }
     }
@@ -150,10 +158,12 @@ public class ScanActivity extends BaseActivity {
                 .getProduct(productId, new Callback<Product>() {
                     @Override
                     public void success(Product product, Response response) {
-                        Intent intent = new Intent();
-                        intent.putExtra(PARAM_PRODUCT, product);
-                        setResult(RESULT_OK, intent);
-
+                        if (product != null) {
+                            Intent intent = new Intent();
+                            product.setQuantity(1);
+                            intent.putExtra(PARAM_PRODUCT, product);
+                            setResult(RESULT_OK, intent);
+                        }
                         dismissDialog();
                         finish();
                     }
