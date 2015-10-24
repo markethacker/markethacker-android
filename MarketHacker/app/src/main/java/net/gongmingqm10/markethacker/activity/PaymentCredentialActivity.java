@@ -15,16 +15,18 @@ public class PaymentCredentialActivity extends BaseActivity {
     @Bind(R.id.qr_image)
     protected ImageView qrImage;
 
+    String orderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_credential);
-
+        orderId = getIntent().getStringExtra(PaymentActivity.PARAM_ORDER_ID);
         initView();
     }
 
     private void initView() {
-        Bitmap myBitmap = QRCode.from(ApiEnvironment.BASE_URL).bitmap();
+        Bitmap myBitmap = QRCode.from("markethacker://"+orderId).bitmap();
         qrImage.setImageBitmap(myBitmap);
     }
 }

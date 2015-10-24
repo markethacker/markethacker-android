@@ -1,5 +1,7 @@
 package net.gongmingqm10.markethacker.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Product implements Serializable {
@@ -9,6 +11,8 @@ public class Product implements Serializable {
     private float price;
     private String desc;
     private Avatar avatar;
+
+    @SerializedName("count")
     private int quantity = 1;
 
     public Product(String desc, int id, String name, String pid, float price, Avatar avatar) {

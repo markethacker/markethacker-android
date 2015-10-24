@@ -1,6 +1,7 @@
 package net.gongmingqm10.markethacker.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.gongmingqm10.markethacker.R;
+import net.gongmingqm10.markethacker.model.Order;
 import net.gongmingqm10.markethacker.model.Product;
+import net.gongmingqm10.markethacker.model.ProductRequest;
+import net.gongmingqm10.markethacker.rest.RestClient;
 import net.gongmingqm10.markethacker.view.ProductAdapter;
 
 import java.util.ArrayList;
@@ -20,6 +25,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -33,9 +41,9 @@ public class MainActivity extends BaseActivity {
     protected Button confirmOrderBtn;
 
     private static final int SCAN_REQUEST = 100;
-    public static final String PARAM_TOTAL = "param_total";
+    public static final String PARAM_ORDER = "param_total";
 
-    private List<Product> products = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<>();
     private ProductAdapter adapter;
 
     @Override
@@ -111,10 +119,36 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.confirm_order)
     protected void confirmOrder() {
-        Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra(PARAM_TOTAL, getTotalPrice());
+        showProgressDialog();
+        ProductRequest request = new ProductRequest(products);
 
-        startActivity(intent);
+        RestClient.getInstance().getProductService().sendOrders(request, new Callback<Order>() {
+            @Override
+            public void success(Order order, Response response) {
+                dismissProgressDialog();
+                Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                intent.putExtra(PARAM_ORDER, order);
+                startActivity(intent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                dismissProgressDialog();
+                Toast.makeText(MainActivity.this, R.string.order_failed_please_retry, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private ProgressDialog progressDialog;
+
+    private void showProgressDialog() {
+        progressDialog = ProgressDialog.show(this, "", getString(R.string.is_pushing_order));
+    }
+
+    private void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing() && !isFinishing()) {
+            progressDialog.dismiss();
+        }
     }
 
 

@@ -23,5 +23,10 @@
     <string name="payment_success">支付成功</string>
     <string name="get_products_with_qrcode">凭此二维码到售货机提取商品</string>
     <string name="bucket_empty_tips">购物车没有商品，开始购物吧！</string>
+    <string name="order_failed_please_retry">提交订单失败，请稍后重试</string>
+    <string name="is_pushing_order">正在向系统提交订单</string>
+    <string name="is_paying">正在付款...</string>
+    <string name="payment_failure">付款失败，请稍后重新付款</string>
+    <string name="payment_hacking">您提交的付款信息有误，未完成付款</string>
 
 </resources>
